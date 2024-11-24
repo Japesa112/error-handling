@@ -6,14 +6,15 @@
 #include <time.h>
 
 #define SERVER_PORT 12345
+#define SERVER_IP "127.0.0.1" // Change this to the server's IP in Cooja
 #define PACKET_SIZE 1024
 #define MAX_RETRIES 5
-#define ERROR_PROBABILITY 0.1 // 10% chance of error
+#define ERROR_PROBABILITY 0.1 // 10% chance of bit error
 
 void introduce_bit_error(char *packet) {
     for (int i = 0; i < PACKET_SIZE; i++) {
         if ((rand() / (float)RAND_MAX) < ERROR_PROBABILITY) {
-            packet[i] ^= 1; // Flip a bit
+            packet[i] ^= 1; // Flip a random bit
         }
     }
 }
@@ -39,7 +40,7 @@ int main() {
     // Server address configuration
     server_addr.sin_family = AF_INET;
     server_addr.sin_port = htons(SERVER_PORT);
-    server_addr.sin_addr.s_addr = inet_addr("192.168.1.1"); // Replace with server's IP
+    server_addr.sin_addr.s_addr = inet_addr(SERVER_IP);
 
     while (1) {
         memset(packet, 0, PACKET_SIZE);
